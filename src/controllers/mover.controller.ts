@@ -3,6 +3,7 @@ import { MoverSchemaType } from "../models/mover.model";
 import Container from "typedi";
 import MoverService, {
     MoverServiceItemNotFound,
+    MoverServiceMoverOnMission,
     MoverServiceNotFound,
     MoverServiceWeightExceeded,
 } from "../services/mover.service";
@@ -63,6 +64,11 @@ async function updateMoverItems(
         else if (err instanceof MoverServiceItemNotFound)
             throw new ClientError(
                 { items: "Some of the items don't exist" },
+                422,
+            );
+        else if (err instanceof MoverServiceMoverOnMission)
+            throw new ClientError(
+                { mover: "Cannot load as mover is on mission" },
                 422,
             );
         else throw err;

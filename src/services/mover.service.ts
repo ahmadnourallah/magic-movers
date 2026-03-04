@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 export class MoverServiceWeightExceeded extends Error {}
 export class MoverServiceNotFound extends Error {}
 export class MoverServiceItemNotFound extends Error {}
+export class MoverServiceMoverOnMission extends Error {}
 
 @Service()
 class MoverService {
@@ -59,6 +60,8 @@ class MoverService {
         const mover = await this.moverModel.client.findOne({ _id: id });
 
         if (!mover) throw new MoverServiceNotFound();
+        if (mover.questState === "onMission")
+            throw new MoverServiceMoverOnMission();
 
         const oldItems = Array.isArray(mover.items) ? mover.items.slice() : [];
         const newItems = [];
@@ -82,6 +85,7 @@ class MoverService {
 
         const updateItems = [...oldItems, ...newItems];
 
+        mover.questState = "loading";
         mover.items = updateItems;
 
         return await mover.save();

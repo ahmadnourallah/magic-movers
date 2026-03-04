@@ -10,10 +10,15 @@ export enum QuestStateType {
 }
 
 export const MoverSchema = z.object({
-    name: z.string(),
-    weightLimit: z.number(),
-    questState: z.enum(["resting", "loading", "onMission"]),
-    items: z.array(ItemSchema),
+    name: z.string("Name must be a valid string"),
+    weightLimit: z.number("Weight limit must be a valid number"),
+    questState: z.enum(
+        ["resting", "loading", "onMission"],
+        "Quest state is either resting, loading or onMission",
+    ),
+    items: z
+        .array(ItemSchema, "Items must be a valid array of item objects")
+        .optional(),
 });
 export type MoverSchemaType = z.infer<typeof MoverSchema>;
 

@@ -3,8 +3,8 @@ import { Service } from "typedi";
 import z from "zod";
 
 export const ItemSchema = z.object({
-    name: z.string(),
-    weight: z.number(),
+    name: z.string("Name must be a valid string"),
+    weight: z.number("Weight must be a valid number"),
 });
 export type ItemSchemaType = z.infer<typeof ItemSchema>;
 

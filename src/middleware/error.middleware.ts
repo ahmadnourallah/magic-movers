@@ -46,6 +46,8 @@ const serverErrorHandler = (
     res: Response,
     next: NextFunction,
 ) => {
+    console.log(err);
+
     res.status(500).json({
         status: "error",
         code: 500,

@@ -56,6 +56,7 @@ class MissionService {
 
         mover.questState = "resting";
         mover.completedMissions = mover.completedMissions + 1;
+        mover.items = [];
 
         await this.activityModel.client.create({
             mover: new mongoose.Types.ObjectId(moverId),

@@ -1,8 +1,6 @@
 import { Inject, Service } from "typedi";
 import ItemModel, { ItemSchemaType } from "../models/item.model";
 
-export class ItemServiceNotFound extends Error {}
-
 @Service()
 class ItemService {
     @Inject(() => ItemModel)
@@ -20,6 +18,17 @@ class ItemService {
         });
 
         return item;
+    }
+
+    /**
+     * Retrieves all items.
+     *
+     * @returns An array of ItemSchemaType objects
+     */
+    public async getAll() {
+        const items = await this.itemModel.client.find();
+
+        return items;
     }
 }
 

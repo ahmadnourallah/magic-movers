@@ -19,4 +19,13 @@ async function createItem(req: Request, res: Response, next: NextFunction) {
     });
 }
 
-export { createItem };
+async function getItems(req: Request, res: Response, next: NextFunction) {
+    const items = await itemService.getAll();
+
+    res.status(200).json({
+        status: "success",
+        data: { items },
+    });
+}
+
+export { createItem, getItems };

@@ -1,0 +1,31 @@
+/activities:
+    get:
+        tags:
+            - Activity
+        summary: Get all activity logs
+        description: Retrieves all activity logs.
+
+        responses:
+            200:
+                description: OK
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                status:
+                                    type: string
+                                    example: success
+                                data:
+                                    type: object
+                                    properties:
+                                        activities:
+                                            type: array
+                                            items:
+                                                allOf:
+                                                    - $ref: "#/components/schemas/Activity"
+                                                    - type: object
+                                                      properties:
+                                                          mover:
+                                                              type: object
+                                                              $ref: "#/components/schemas/Mover"

@@ -12,6 +12,8 @@ import activityRouter from "./routers/activity.router";
 import missionRouter from "./routers/mission.router";
 import jsonParser from "./middleware/jsonParser.middleware";
 import mongoose from "mongoose";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.config";
 
 const app = express();
 
@@ -24,6 +26,7 @@ app.use("/movers", moverRouter);
 app.use("/items", itemRouter);
 app.use("/activities", activityRouter);
 app.use("/missions", missionRouter);
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     throw new ClientError({ resource: "Resource not found" }, 404);

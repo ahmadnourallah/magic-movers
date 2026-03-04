@@ -7,6 +7,7 @@ import {
 import express, { NextFunction, Request, Response } from "express";
 import { DB_URL } from "./config/env.config";
 import moverRouter from "./routers/mover.router";
+import itemRouter from "./routers/item.router";
 import jsonParser from "./middleware/jsonParser.middleware";
 import mongoose from "mongoose";
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(jsonParser);
 
 app.use("/movers", moverRouter);
+app.use("/items", itemRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     throw new ClientError({ resource: "Resource not found" }, 404);

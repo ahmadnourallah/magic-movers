@@ -2,10 +2,7 @@
 
 ### Overview
 
-**Magic Movers** is a small REST API for managing magical couriers (Movers), the items they carry, and the missions they complete.  
-You can register Movers with a weight limit, create Items with a magical weight, load items onto Movers, start and end missions that move cargo around, and track all of these actions through activity logs. The missions and activity history make it easy to see which Movers have completed the most work over time.
-
----
+**Magic Movers** is a small REST API for managing magical couriers (Movers), the items they carry, and the missions they complete. You can register Movers with a weight limit, create Items with a magical weight, load items onto Movers, start and end missions that move cargo around, and track all of these actions through activity logs. The missions and activity history make it easy to see which Movers have completed the most work over time.
 
 ### Technologies Used
 
@@ -23,8 +20,6 @@ You can register Movers with a weight limit, create Items with a magical weight,
 -   **API Documentation**
     -   **Swagger (OpenAPI 3)** via `swagger-jsdoc` and `swagger-ui-express`.
     -   JSDoc-style Swagger definitions under `src/specs/*.yaml`.
-
----
 
 ### Getting Started
 
@@ -50,8 +45,6 @@ DB_URL=mongodb://localhost:27017/magic-movers # Or your Mongo connection string.
 ```bash
 npm install
 ```
-
----
 
 ### Build and Run
 
@@ -88,8 +81,6 @@ Once running, the API is available at:
 -   **Base URL**: `http://localhost:<PORT>` (default `http://localhost:3000`).
 -   **Swagger UI**: `GET /` — interactive API docs and testing console.
 
----
-
 ### API Endpoints
 
 For full request/response schemas and examples, see the **Swagger UI** at `/`.
@@ -104,8 +95,6 @@ For full request/response schemas and examples, see the **Swagger UI** at `/`.
 | POST       | `/missions`               | Start a mission for a specific Mover.                      |
 | DELETE     | `/missions`               | End an active mission and unload all items from a Mover.   |
 | GET        | `/activities`             | Retrieve activity logs for all loading and mission events. |
-
----
 
 ### Architectural Features
 
@@ -133,8 +122,6 @@ For full request/response schemas and examples, see the **Swagger UI** at `/`.
 -   **Centralized Error Handling**
     -   Custom `ClientError` and error-handling middleware distinguish between client and server errors.
     -   Ensures that consumers receive consistent, well-structured error responses.
-
----
 
 ### Development Notes
 

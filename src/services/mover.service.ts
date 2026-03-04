@@ -2,6 +2,7 @@ import { Inject, Service } from "typedi";
 import MoverModel, { MoverSchemaType } from "../models/mover.model";
 import ItemModel from "../models/item.model";
 import mongoose from "mongoose";
+import ActivityModel from "../models/activity.model";
 
 export class MoverServiceWeightExceeded extends Error {}
 export class MoverServiceNotFound extends Error {}
@@ -14,6 +15,8 @@ class MoverService {
     private moverModel!: MoverModel;
     @Inject(() => ItemModel)
     private itemModel!: ItemModel;
+    @Inject(() => ActivityModel)
+    private activityModel!: ActivityModel;
 
     /**
      * Creates a new mover.
@@ -37,6 +40,7 @@ class MoverService {
     public async getAll() {
         const movers = await this.moverModel.client
             .find()
+            .populate("items")
             .sort("completedMissions");
 
         return movers;
@@ -87,6 +91,11 @@ class MoverService {
 
         mover.questState = "loading";
         mover.items = updateItems;
+
+        await this.activityModel.client.create({
+            mover: new mongoose.Types.ObjectId(mover.id),
+            state: "loading",
+        });
 
         return await mover.save();
     }

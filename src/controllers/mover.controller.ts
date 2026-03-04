@@ -21,4 +21,13 @@ async function createMover(req: Request, res: Response, next: NextFunction) {
     });
 }
 
-export { createMover };
+async function getMovers(req: Request, res: Response, next: NextFunction) {
+    const movers = await moverService.getAll();
+
+    res.status(200).json({
+        status: "success",
+        data: { movers },
+    });
+}
+
+export { createMover, getMovers };

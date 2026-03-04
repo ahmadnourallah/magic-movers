@@ -19,6 +19,19 @@ class MoverService {
 
         return mover;
     }
+
+    /**
+     * Retrieves all users, sorted by completedMissions.
+     *
+     * @returns An array of MoverSchemaType objects
+     */
+    public async getAll() {
+        const movers = await this.moverModel.client
+            .find()
+            .sort("completedMissions");
+
+        return movers;
+    }
 }
 
 export default MoverService;

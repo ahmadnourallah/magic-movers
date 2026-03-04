@@ -15,6 +15,14 @@ import mongoose from "mongoose";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.config";
 
+declare global {
+    namespace Express {
+        interface Request {
+            validQuery: any;
+        }
+    }
+}
+
 const app = express();
 
 mongoose.connect(DB_URL);

@@ -41,7 +41,7 @@ class MoverService {
         const movers = await this.moverModel.client
             .find()
             .populate("items")
-            .sort("completedMissions");
+            .sort({ completedMissions: -1 });
 
         return movers;
     }

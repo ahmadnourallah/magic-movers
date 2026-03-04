@@ -1,0 +1,122 @@
+/movers:
+    get:
+        tags:
+            - Mover
+        summary: Get all movers
+        description: Retrieves all movers, sorted by completedMissions.
+
+        responses:
+            200:
+                description: OK
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                status:
+                                    type: string
+                                    example: success
+                                data:
+                                    type: object
+                                    properties:
+                                        movers:
+                                            type: array
+                                            items:
+                                                allOf:
+                                                    - $ref: "#/components/schemas/Mover"
+                                                    - type: object
+                                                      properties:
+                                                          _items:
+                                                              type: array
+                                                              items:
+                                                                  $ref: "#/components/schemas/Item"
+
+    post:
+        tags:
+            - Mover
+        summary: Create a mover
+        description: Creates a new mover in the database.
+
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        allOf:
+                            - $ref: "#/components/schemas/Mover"
+
+        responses:
+            201:
+                description: Created
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                status:
+                                    type: string
+                                    example: success
+                                data:
+                                    type: object
+                                    properties:
+                                        - allOf:
+                                              - $ref: "#/components/schemas/Mover"
+                                              - type: object
+                                                properties:
+                                                    _items:
+                                                        type: array
+                                                        items:
+                                                            $ref: "#/components/schemas/Item"
+
+            422:
+                $ref: "#/components/responses/ValidationError"
+
+/movers/{moverId}/items:
+    put:
+        tags:
+            - Mover
+        summary: Load a mover with items
+        description: Loads a mover with new items. Movers in onMission state cannot be loaded.
+
+        requestBody:
+            description: The *items* field must be an array of existent item ids.
+            required: true
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            items:
+                                type: array
+                                items:
+                                    type: string
+
+        responses:
+            200:
+                description: Updated
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                status:
+                                    type: string
+                                    example: success
+                                data:
+                                    type: object
+                                    properties:
+                                        mover:
+                                            allOf:
+                                                - $ref: "#/components/schemas/Mover"
+                                                - type: object
+                                                  properties:
+                                                      _items:
+                                                          type: array
+                                                          items:
+                                                              $ref: "#/components/schemas/Item"
+
+            404:
+                $ref: "#/components/responses/NotFoundError"
+
+            422:
+                $ref: "#/components/responses/ValidationError"

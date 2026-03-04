@@ -1,7 +1,6 @@
 import { Model, Schema, model } from "mongoose";
 import { Service } from "typedi";
-import { ItemSchema } from "./item.model";
-import z, { number } from "zod";
+import z from "zod";
 
 export enum QuestStateType {
     resting,
@@ -16,9 +15,7 @@ export const MoverSchema = z.object({
         ["resting", "loading", "onMission"],
         "Quest state is either resting, loading or onMission",
     ),
-    items: z
-        .array(ItemSchema, "Items must be a valid array of item objects")
-        .optional(),
+    items: z.array(z.any()).optional(),
     completedMissions: z.number().default(0).readonly(),
 });
 export type MoverSchemaType = z.infer<typeof MoverSchema>;

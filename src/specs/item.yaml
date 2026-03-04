@@ -1,0 +1,62 @@
+/items:
+    get:
+        tags:
+            - Item
+        summary: Get all items
+        description: Retrieves all items.
+
+        responses:
+            200:
+                description: OK
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                status:
+                                    type: string
+                                    example: success
+                                data:
+                                    type: object
+                                    properties:
+                                        items:
+                                            type: array
+                                            items:
+                                                allOf:
+                                                    - $ref: "#/components/schemas/Item"
+                                                    - type: object
+
+    post:
+        tags:
+            - Item
+        summary: Create an item
+        description: Creates a new item in the database.
+
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        allOf:
+                            - $ref: "#/components/schemas/Item"
+
+        responses:
+            201:
+                description: Created
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                status:
+                                    type: string
+                                    example: success
+                                data:
+                                    type: object
+                                    properties:
+                                        - allOf:
+                                              - $ref: "#/components/schemas/Item"
+                                              - type: object
+
+            422:
+                $ref: "#/components/responses/ValidationError"

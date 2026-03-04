@@ -4,6 +4,7 @@ import ActivityModel from "../models/activity.model";
 import mongoose from "mongoose";
 
 export class MissionServiceMoverNotFound extends Error {}
+export class MissionServiceMoverNotOnMission extends Error {}
 
 @Service()
 class MissionService {
@@ -31,6 +32,34 @@ class MissionService {
         await this.activityModel.client.create({
             mover: new mongoose.Types.ObjectId(moverId),
             state: "onMission",
+        });
+
+        return await mover.save();
+    }
+
+    /**
+     * Ends a mover's mission.
+     *
+     * @param - Mover's id
+     * @returns MoverSchemaType object
+     */
+    public async end(moverId: string) {
+        if (!mongoose.Types.ObjectId.isValid(moverId))
+            throw new MissionServiceMoverNotFound();
+
+        const mover = await this.moverModel.client.findOne({ _id: moverId });
+
+        if (!mover) throw new MissionServiceMoverNotFound();
+
+        if (mover.questState !== "onMission")
+            throw new MissionServiceMoverNotOnMission();
+
+        mover.questState = "resting";
+        mover.completedMissions = mover.completedMissions + 1;
+
+        await this.activityModel.client.create({
+            mover: new mongoose.Types.ObjectId(moverId),
+            state: "resting",
         });
 
         return await mover.save();

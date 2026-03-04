@@ -1,10 +1,18 @@
 import { Inject, Service } from "typedi";
 import MoverModel, { MoverSchemaType } from "../models/mover.model";
+import ItemModel from "../models/item.model";
+import mongoose from "mongoose";
+
+export class MoverServiceWeightExceeded extends Error {}
+export class MoverServiceNotFound extends Error {}
+export class MoverServiceItemNotFound extends Error {}
 
 @Service()
 class MoverService {
     @Inject(() => MoverModel)
     private moverModel!: MoverModel;
+    @Inject(() => ItemModel)
+    private itemModel!: ItemModel;
 
     /**
      * Creates a new mover.
@@ -21,7 +29,7 @@ class MoverService {
     }
 
     /**
-     * Retrieves all users, sorted by completedMissions.
+     * Retrieves all movers, sorted by completedMissions.
      *
      * @returns An array of MoverSchemaType objects
      */
@@ -31,6 +39,52 @@ class MoverService {
             .sort("completedMissions");
 
         return movers;
+    }
+
+    /**
+     * Updates the items of a mover.
+     *
+     * @returns The updated mover.
+     */
+    public async updateItems({
+        id,
+        itemIds,
+    }: {
+        id: string;
+        itemIds: string[];
+    }) {
+        if (!mongoose.Types.ObjectId.isValid(id))
+            throw new MoverServiceNotFound();
+
+        const mover = await this.moverModel.client.findOne({ _id: id });
+
+        if (!mover) throw new MoverServiceNotFound();
+
+        const oldItems = Array.isArray(mover.items) ? mover.items.slice() : [];
+        const newItems = [];
+
+        for (const itemId of itemIds) {
+            if (!mongoose.Types.ObjectId.isValid(itemId))
+                throw new MoverServiceItemNotFound();
+
+            const item = await this.itemModel.client.findOne({
+                _id: itemId,
+            });
+
+            if (!item) throw new MoverServiceItemNotFound();
+
+            if (item.weight > mover.weightLimit)
+                throw new MoverServiceWeightExceeded();
+
+            if (!oldItems.includes(itemId))
+                newItems.push(new mongoose.Types.ObjectId(itemId));
+        }
+
+        const updateItems = [...oldItems, ...newItems];
+
+        mover.items = updateItems;
+
+        return await mover.save();
     }
 }
 

@@ -1,0 +1,74 @@
+components:
+    schemas:
+        Mover:
+            type: object
+            properties:
+                _id:
+                    type: string
+                    readOnly: true
+                __v:
+                    type: number
+                    readOnly: true
+                name:
+                    type: string
+                weightLimit:
+                    type: number
+                questState:
+                    type: string
+                    enum: ["resting", "loading", "onMission"]
+                completedMissions:
+                    type: number
+                    readOnly: true
+                items:
+                    type: array
+                    writeOnly: true
+                    items:
+                        - type: string
+                createdAt:
+                    type: string
+                    readOnly: true
+                updatedAt:
+                    type: string
+                    readOnly: true
+
+        Item:
+            type: object
+            properties:
+                _id:
+                    type: string
+                    readOnly: true
+                __v:
+                    type: number
+                    readOnly: true
+                name:
+                    type: string
+                weight:
+                    type: number
+                createdAt:
+                    type: string
+                    readOnly: true
+                updatedAt:
+                    type: string
+                    readOnly: true
+
+        Activity:
+            type: object
+            properties:
+                _id:
+                    type: string
+                    readOnly: true
+                __v:
+                    type: number
+                    readOnly: true
+                moverId:
+                    type: string
+                    writeOnly: true
+                state:
+                    type: string
+                    enum: ["resting", "loading", "onMission"]
+                createdAt:
+                    type: string
+                    readOnly: true
+                updatedAt:
+                    type: string
+                    readOnly: true

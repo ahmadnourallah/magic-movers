@@ -5,9 +5,13 @@ import {
     ClientError,
 } from "./middleware/error.middleware";
 import express, { NextFunction, Request, Response } from "express";
+import { DB_URL } from "./config/env.config";
 import jsonParser from "./middleware/jsonParser.middleware";
+import mongoose from "mongoose";
 
 const app = express();
+
+mongoose.connect(DB_URL);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(jsonParser);
